@@ -131,3 +131,4 @@ AACAY.diffp <- diff(AACAYxts)
 AACG.diffp <- diff(AACGxts)
 AADR.diffp <- diff(AADR.xts)
 
+#test
