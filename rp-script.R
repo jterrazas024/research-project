@@ -136,6 +136,10 @@ A.diffp <- diff(Axts)
 AA.diffp <- diff(AAxts)
 AACAY.diffp <- diff(AACAYxts)
 AACG.diffp <- diff(AACGxts)
-AADR.diffp <- diff(AADR.xts)
+AADR.diffp <- diff(AADRxts)
 
-#test
+#testing to see if I could set up a regression 
+cor(A.diffp[,1], Astock.dailyreturns[,1])
+plot(A.diffp[,1], Astock.dailyreturns[,1])
+
+
