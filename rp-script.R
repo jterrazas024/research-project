@@ -12,8 +12,15 @@ for(file in files)
 
 #converting to xts
 str(AB)
+
 AB$timestamp <- as.character(AB$timestamp)
+
 AB$timestamp <- as.POSIXct(AB$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
+
+AB$timestamp <- as.character(AB$timestamp)
+
+AB$timestamp <- as.POSIXct(AB$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
+
 subset(AB, is.na(AB))
 
 #these were the rows that contained NA variables 
