@@ -1,6 +1,6 @@
 
-library(data.table)
 library(xts)
+library(data.table)
 
 path <- "data/"
 files <- list.files(path=path, pattern="*.csv")
@@ -17,6 +17,9 @@ for(file in files)
 str(AB)
 ABxts <- xts(AB$users_holding, order.by = AB$timestamp)
 
+# convert intra-day to daily periodicity, witouth Open-High-Low data for now...
+ABxtsDaily <- to.daily(ABxts,  OHLC = FALSE)
+
 #converting test folder to xts
 Axts <- xts(A$users_holding, order.by = A$timestamp)
 
@@ -30,30 +33,12 @@ AACGxts <- xts(AACG$users_holding, order.by = AACG$timestamp)
 
 #AAcopy
 str(AAcopy)
-
-AAcopy$timestamp <- as.character(AAcopy$timestamp)
-
-AAcopy$timestamp <- as.POSIXct(AAcopy$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
-
-subset(AAcopy, is.na(AAcopy))
-
-AAcopy.nona <-  na.omit(AAcopy)
-
-AAxts <- xts(AAcopy.nona$users_holding, order.by = AAcopy.nona$timestamp)
+AAxts <- xts(AA$users_holding, order.by = AA$timestamp)
 
 #AADRcopy
 str(AADRcopy)
 
-AADRcopy$timestamp <- as.character(AADRcopy$timestamp)
-
-AADRcopy$timestamp <- as.POSIXct(AADRcopy$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
-
-subset(AADRcopy, is.na(AADRcopy))
-
-AADRcopy.nona <-  na.omit(AADRcopy)
-
 AADRxts <- xts(AADRcopy.nona$users_holding, order.by = AADRcopy.nona$timestamp)
-
 
 #getting stock prices A, AA, AACAY, AACG, AADR
 library(quantmod)
@@ -82,9 +67,8 @@ Astock.dailyreturns <- CalculateReturns(Astock.closing)
 
 #plotting returns to visualize returns 
 plot(Astock.dailyreturns["2018/2020"])
+
 #plotting returns to visualize returns 
-
-
 AAstock.dailyreturns <- CalculateReturns(AAstock.closing)
 AACAYstock.dailyreturns <- CalculateReturns(AACAYstock.closing)
 AACGstock.dailyreturns <- CalculateReturns(AACGstock.closing)
