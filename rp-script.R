@@ -1,5 +1,6 @@
 
 library(data.table)
+library(xts)
 
 path <- "data/"
 files <- list.files(path=path, pattern="*.csv")
@@ -14,65 +15,18 @@ for(file in files)
 
 #converting to xts
 str(AB)
-
-AB$timestamp <- as.character(AB$timestamp)
-
-AB$timestamp <- as.POSIXct(AB$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
-
-AB$timestamp <- as.character(AB$timestamp)
-
-AB$timestamp <- as.POSIXct(AB$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
-
-subset(AB, is.na(AB))
-
-#these were the rows that contained NA variables 
-AB <- AB[-c(7113,15416),]
-
-#or use na.omit
-AB.nona <- na.omit(AB)
-
-ABxts <- xts(AB.nona$users_holding, order.by = AB.nona$timestamp)
+ABxts <- xts(AB$users_holding, order.by = AB$timestamp)
 
 #converting test folder to xts
-#Acopy
-str(Acopy)
-
-Acopy$timestamp <- as.character(Acopy$timestamp)
-
-Acopy$timestamp <- as.POSIXct(Acopy$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
-
-subset(Acopy, is.na(Acopy))
-
-Acopy.nona <- na.omit(Acopy)
-
-Axts <- xts(Acopy.nona$users_holding, order.by = Acopy.nona$timestamp)
-
+Axts <- xts(A$users_holding, order.by = A$timestamp)
 
 #AACAYcopy
-str(AACAYcopy)
-
-AACAYcopy$timestamp <- as.character(AACAYcopy$timestamp)
-
-AACAYcopy$timestamp <- as.POSIXct(AACAYcopy$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
-
-subset(AACAYcopy, is.na(AACAYcopy))
-
-AACAYcopy.nona <-  na.omit(AACAYcopy)
-
-AACAYxts <- xts(AACAYcopy.nona$users_holding, order.by = AACAYcopy.nona$timestamp)
+str(AACAY)
+AACAYxts <- xts(AACAY$users_holding, order.by = AACAY$timestamp)
 
 #AACGcopy
-str(AACGcopy)
-
-AACGcopy$timestamp <- as.character(AACGcopy$timestamp)
-
-AACGcopy$timestamp <- as.POSIXct(AACGcopy$timestamp, tz = "", format = "%Y-%m-%d %H:%M:%OS")
-
-subset(AACGcopy, is.na(AACGcopy))
-
-AACGcopy.nona <-  na.omit(AACGcopy)
-
-AACGxts <- xts(AACGcopy.nona$users_holding, order.by = AACGcopy.nona$timestamp)
+str(AACG)
+AACGxts <- xts(AACG$users_holding, order.by = AACG$timestamp)
 
 #AAcopy
 str(AAcopy)
@@ -102,13 +56,16 @@ AADRxts <- xts(AADRcopy.nona$users_holding, order.by = AADRcopy.nona$timestamp)
 
 
 #getting stock prices A, AA, AACAY, AACG, AADR
-install.packages("quantmod")
 library(quantmod)
 Astock <- getSymbols("A", auto.assign = FALSE)
 AAstock <- getSymbols("AA", auto.assign = FALSE)
 AACAYstock <- getSymbols("AACAY", auto.assign = FALSE)
 AACGstock <- getSymbols("AACG", auto.assign = FALSE)
 AADRstock <- getSymbols("AADR", auto.assign = FALSE)
+
+# perh
+test_stocks <- gsub(".csv", "", files[3:8])
+getSymbols(test_stocks, from = "2018-05-01", to = "2020-08")
 
 #getting only the closing prices
 Astock.closing <- Cl(Astock)
