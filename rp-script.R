@@ -1,5 +1,7 @@
-path <- "~/Desktop/tmp/test folder/"
 
+library(data.table)
+
+path <- "data/"
 files <- list.files(path=path, pattern="*.csv")
 
 for(file in files)
@@ -7,7 +9,7 @@ for(file in files)
   perpos <- which(strsplit(file, "")[[1]]==".")
   assign(
     gsub(" ","",substr(file, 1, perpos-1)), 
-    read.csv(paste(path,file,sep="")))
+    fread(paste(path,file,sep="")))
 }
 
 #converting to xts
